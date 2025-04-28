@@ -1,0 +1,109 @@
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addTask, removeTask, clearTasks } from '../redux/taskSlicer';
+
+function TaskManager() {
+  const tasks = useSelector((state) => state.tasks.tasks);
+  const dispatch = useDispatch();
+
+  const handleAddTask = () => {
+    const taskName = prompt('Enter task name:');
+    if (taskName) {
+      dispatch(addTask({ id: Date.now(), name: taskName }));
+    }
+  };
+
+  const handleRemoveTask = (id) => {
+    dispatch(removeTask(id));
+  };
+
+  const handleClearTasks = () => {
+    dispatch(clearTasks());
+  };
+
+  return (
+    <div className="task-manager-container">
+      <h2 className="title">Task Manager</h2>
+      <button className="add-button" onClick={handleAddTask}>Add Task</button>
+      <ul className="task-list">
+        {tasks.map((task) => (
+          <li key={task.id} className="task-item">
+            <span>{task.name}</span>
+            <button className="remove-button" onClick={() => handleRemoveTask(task.id)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+      <button className="clear-button" onClick={handleClearTasks}>Clear All Tasks</button>
+
+      {/* CSS Styles */}
+      <style>{`
+        .task-manager-container {
+          max-width: 500px;
+          margin: 30px auto;
+          padding: 20px;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          background-color: #f9f9f9;
+          text-align: center;
+        }
+
+        .title {
+          margin-bottom: 20px;
+          color: #333;
+        }
+
+        .add-button, .clear-button {
+          padding: 10px 20px;
+          margin: 10px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+        }
+
+        .clear-button {
+          background-color: #f44336;
+        }
+
+        .add-button:hover, .clear-button:hover {
+          opacity: 0.8;
+        }
+
+        .task-list {
+          list-style: none;
+          padding: 0;
+          margin-top: 20px;
+        }
+
+        .task-item {
+          background: white;
+          margin: 10px 0;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .remove-button {
+          background-color: #ff5252;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          color: white;
+          cursor: pointer;
+          font-size: 14px;
+        }
+
+        .remove-button:hover {
+          background-color: #e53935;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default TaskManager;
